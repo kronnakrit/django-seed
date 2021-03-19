@@ -125,6 +125,11 @@ You may specify a different locale by passing it in the constructor of the seede
     seeder = Seed.seeder(locale='sv_SE')
     seeder.faker.city()  # 'Västerås'
 
+This library turn off `auto_add` and `auto_add_now` by default. If you want to disable this function, you can insert more parameters into `seed.execute`
+
+.. code-block:: python
+    # Default: True
+    seeder.execute(turn_off_auto_now=False)
 
 Localization
 ------------
