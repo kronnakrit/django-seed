@@ -130,7 +130,7 @@ class ModelSeeder(object):
 
         return formatters
 
-    def execute(self, using, inserted_entities):
+    def execute(self, using, inserted_entities, turn_off_auto_now):
         """
         Execute the stages entities to insert
         :param using:
@@ -150,7 +150,8 @@ class ModelSeeder(object):
                     field.auto_now_add = False
 
         manager = self.model.objects.db_manager(using=using)
-        turn_off_auto_add(manager.model)
+        if turn_off_auto_now:
+            turn_off_auto_add(manager.model)
 
         faker_data = {
             field: format_field(field_format, inserted_entities)
@@ -209,7 +210,7 @@ class Seeder(object):
         }
         self.orders.append(order)
 
-    def execute(self, using=None, inserted_entities={}):
+    def execute(self, using=None, inserted_entities={}, turn_off_auto_now=True):
         """
         Populate the database using all the Entity classes previously added.
         :param using A Django database connection name
@@ -230,7 +231,7 @@ class Seeder(object):
             if klass not in inserted_entities:
                 inserted_entities[klass] = []
             for i in range(0, number):
-                executed_entity = entity.execute(using, inserted_entities)
+                executed_entity = entity.execute(using, inserted_entities, turn_off_auto_now)
                 inserted_entities[klass].append(executed_entity)
 
         return inserted_entities
